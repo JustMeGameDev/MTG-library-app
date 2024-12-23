@@ -1,0 +1,31 @@
+C:\Users\korne\RiderProjects\MTG Library2\MTG Library2\bin\Debug\net6.0-windows\MTG Library2.exe
+C:\Users\korne\RiderProjects\MTG Library2\MTG Library2\bin\Debug\net6.0-windows\MTG Library2.deps.json
+C:\Users\korne\RiderProjects\MTG Library2\MTG Library2\bin\Debug\net6.0-windows\MTG Library2.runtimeconfig.json
+C:\Users\korne\RiderProjects\MTG Library2\MTG Library2\bin\Debug\net6.0-windows\MTG Library2.dll
+C:\Users\korne\RiderProjects\MTG Library2\MTG Library2\bin\Debug\net6.0-windows\MTG Library2.pdb
+C:\Users\korne\RiderProjects\MTG Library2\MTG Library2\bin\Debug\net6.0-windows\Newtonsoft.Json.dll
+C:\Users\korne\RiderProjects\MTG Library2\MTG Library2\bin\Debug\net6.0-windows\RestSharp.dll
+C:\Users\korne\RiderProjects\MTG Library2\MTG Library2\obj\Debug\net6.0-windows\MTG Library2.csproj.AssemblyReference.cache
+C:\Users\korne\RiderProjects\MTG Library2\MTG Library2\obj\Debug\net6.0-windows\LoadingWindow.baml
+C:\Users\korne\RiderProjects\MTG Library2\MTG Library2\obj\Debug\net6.0-windows\MainWindow.baml
+C:\Users\korne\RiderProjects\MTG Library2\MTG Library2\obj\Debug\net6.0-windows\View\DarkTheme.baml
+C:\Users\korne\RiderProjects\MTG Library2\MTG Library2\obj\Debug\net6.0-windows\App.baml
+C:\Users\korne\RiderProjects\MTG Library2\MTG Library2\obj\Debug\net6.0-windows\LoadingWindow.g.cs
+C:\Users\korne\RiderProjects\MTG Library2\MTG Library2\obj\Debug\net6.0-windows\MainWindow.g.cs
+C:\Users\korne\RiderProjects\MTG Library2\MTG Library2\obj\Debug\net6.0-windows\App.g.cs
+C:\Users\korne\RiderProjects\MTG Library2\MTG Library2\obj\Debug\net6.0-windows\MTG Library2_MarkupCompile.cache
+C:\Users\korne\RiderProjects\MTG Library2\MTG Library2\obj\Debug\net6.0-windows\MTG Library2.g.resources
+C:\Users\korne\RiderProjects\MTG Library2\MTG Library2\obj\Debug\net6.0-windows\MTG Library2.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\korne\RiderProjects\MTG Library2\MTG Library2\obj\Debug\net6.0-windows\MTG Library2.AssemblyInfoInputs.cache
+C:\Users\korne\RiderProjects\MTG Library2\MTG Library2\obj\Debug\net6.0-windows\MTG Library2.AssemblyInfo.cs
+C:\Users\korne\RiderProjects\MTG Library2\MTG Library2\obj\Debug\net6.0-windows\MTG Library2.csproj.CoreCompileInputs.cache
+C:\Users\korne\RiderProjects\MTG Library2\MTG Library2\obj\Debug\net6.0-windows\MTG Library2.csproj.CopyComplete
+C:\Users\korne\RiderProjects\MTG Library2\MTG Library2\obj\Debug\net6.0-windows\MTG Library2.dll
+C:\Users\korne\RiderProjects\MTG Library2\MTG Library2\obj\Debug\net6.0-windows\refint\MTG Library2.dll
+C:\Users\korne\RiderProjects\MTG Library2\MTG Library2\obj\Debug\net6.0-windows\MTG Library2.pdb
+C:\Users\korne\RiderProjects\MTG Library2\MTG Library2\obj\Debug\net6.0-windows\MTG Library2.genruntimeconfig.cache
+C:\Users\korne\RiderProjects\MTG Library2\MTG Library2\obj\Debug\net6.0-windows\ref\MTG Library2.dll
+C:\Users\korne\RiderProjects\MTG Library2\MTG Library2\bin\Debug\net6.0-windows\MaterialDesignColors.dll
+C:\Users\korne\RiderProjects\MTG Library2\MTG Library2\bin\Debug\net6.0-windows\MaterialDesignThemes.Wpf.dll
+C:\Users\korne\RiderProjects\MTG Library2\MTG Library2\bin\Debug\net6.0-windows\Microsoft.Xaml.Behaviors.dll
+C:\Users\korne\RiderProjects\MTG Library2\MTG Library2\bin\Debug\net6.0-windows\CsvHelper.dll
