@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "7hVbMxw+c+QGbBoIS5vk0VrkBwtwT1YWrIWXnVIms4clOVSwNHPoyowIlEBgfgg9LcDSfRrVA84gKuiYsEYx3w==",
+  "dgSpecHash": "/S0yGkg1d/X3CvctzkrBplTOiRkJL31S3de6pikN49AcRJkFEQb480BmXXTXHnfOi+sZZ1BE8PeYLN3tRYV5nw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\korne\\RiderProjects\\MTG Library2\\MTG Library2\\MTG Library2.csproj",
+  "projectFilePath": "C:\\Users\\korne\\RiderProjects\\MTG Library2\\MTG-librart-app\\MTG Library2\\MTG Library2.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\korne\\.nuget\\packages\\csvhelper\\33.0.1\\csvhelper.33.0.1.nupkg.sha512",
     "C:\\Users\\korne\\.nuget\\packages\\materialdesigncolors\\3.1.1-ci795\\materialdesigncolors.3.1.1-ci795.nupkg.sha512",

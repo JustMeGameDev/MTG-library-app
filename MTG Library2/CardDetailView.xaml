@@ -1,0 +1,23 @@
+﻿<Window x:Class="MTG_Library2.CardDetailView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="CardName" Height="700" Width="500">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Image Name="CardImage" Height="500" HorizontalAlignment="Center"/>
+            <StackPanel Grid.Row="1" Margin="10">
+                <TextBlock Name="CardName" FontSize="18" FontWeight="Bold"/>
+                <TextBlock Name="ManaCost" FontSize="14" FontStyle="Italic" Margin="0,5"/>
+                <TextBlock Name="CardText" TextWrapping="Wrap" Margin="0,5"/>
+                <TextBlock Name="Legality" Margin="0,5"/>
+                <TextBlock Name="IllegalFormats" Margin="0,5"/>
+                <TextBlock Name="Rulings" TextWrapping="Wrap" Margin="0,5"/>
+                <TextBlock Name="IsFoil" Margin="0,5"/>
+            </StackPanel>
+        </Grid>
+    </ScrollViewer>
+</Window>

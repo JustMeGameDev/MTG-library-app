@@ -45,7 +45,7 @@
                        Visibility="Collapsed"
                        FontSize="20" />
         <!-- Resultaatlijst -->
-        <ListBox x:Name="ResultsListView" Margin="10,50,10,50" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+        <ListBox x:Name="ResultsListView" Margin="10,50,10,50" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" MouseDoubleClick="ResultsListView_MouseDoubleClick">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal" Margin="5">

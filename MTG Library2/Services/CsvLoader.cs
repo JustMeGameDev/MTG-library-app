@@ -6,7 +6,9 @@ using Newtonsoft.Json;
 using CsvHelper;
 using CsvHelper.Configuration;
 using System.Globalization;
+using System.Net.Http;
 using MTG_Library2;
+using Newtonsoft.Json.Linq;
 
 public class CsvLoader
 {
@@ -18,18 +20,23 @@ public class CsvLoader
         _jsonFilePath = jsonFilePath;
         _scryfallCards = LoadAllCardsFromJson(jsonFilePath);
     }
-    private Card MapJsonToCard(ScryfallCard card)
+    
+    private Card MapJsonToCard(ScryfallCard scryfallCard)
     {
         return new Card
         {
-            name = card.name,
-            set = card.set,
-            collector_number = card.collector_number,
-            Quantity = 0, // Zet standaard op 0, tenzij je dit ergens anders definieert
-            Style = string.Empty, // Leeg, tenzij je een waarde hebt
-            image_uris = card.image_uris != null ? card.image_uris.Normal : "NOT_FOUND"
+            name = scryfallCard.name,
+            set = scryfallCard.set,
+            collector_number = scryfallCard.collector_number,
+            image_uris = scryfallCard.image_uris?.Normal ?? "NOT_FOUND",
+            mana_cost = scryfallCard.mana_cost,
+            oracle_text = scryfallCard.oracle_text,
+            legalities = scryfallCard.legalities,
+            rulings_uri = scryfallCard.rulings_uri
         };
     }
+
+
 private Dictionary<string, Card> LoadAllCardsFromJson(string jsonFilePath)
 {
     var cardDictionary = new Dictionary<string, Card>();
@@ -92,7 +99,7 @@ private Dictionary<string, Card> LoadAllCardsFromJson(string jsonFilePath)
 
         cardDictionary[key] = card;
 
-        if (string.IsNullOrEmpty(card.image_uris) || card.image_uris == "NOT_FOUND")
+        if (string.IsNullOrEmpty(card.image_uris) || card.image_uris == "https://cards.scryfall.io/normal/front/0/0/001eb913-2afe-4d7d-89a1-7c35de92d702.jpg?1540162762")
         {
             Console.WriteLine($"No image URI found for card: {scryfallCard.name} (Set: {scryfallCard.set}, CollectorNumber: {scryfallCard.collector_number})");
         }
@@ -181,46 +188,132 @@ private Dictionary<string, Card> LoadAllCardsFromJson(string jsonFilePath)
             }
         }
     }
-
-    public void UpdateCsvWithImageUris(string csvFilePath, LoadingWindow loadingWindow)
+    private IEnumerable<dynamic> StreamJsonFile(string jsonFilePath)
     {
-        if (!File.Exists(csvFilePath))
-            throw new FileNotFoundException($"CSV file not found at {csvFilePath}");
-
-        var tempFilePath = $"{csvFilePath}.tmp";
-
-        using (var reader = new StreamReader(new FileStream(csvFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)))
-        using (var writer = new StreamWriter(tempFilePath))
-        using (var csvReader = new CsvReader(reader, new CsvConfiguration(CultureInfo.InvariantCulture) { HasHeaderRecord = true }))
-        using (var csvWriter = new CsvWriter(writer, new CsvConfiguration(CultureInfo.InvariantCulture) { HasHeaderRecord = true }))
+        using (var reader = new StreamReader(jsonFilePath))
+        using (var jsonReader = new JsonTextReader(reader))
         {
-            var records = csvReader.GetRecords<Card>().ToList();
-            int totalRecords = records.Count;
-            int processedRecords = 0;
+            var serializer = new JsonSerializer();
 
-            foreach (var record in records)
+            if (jsonReader.TokenType == JsonToken.StartArray || jsonReader.Read())
             {
-                processedRecords++;
-                var progress = (double)processedRecords / totalRecords * 100;
-
-                loadingWindow.Dispatcher.Invoke(() =>
+                while (jsonReader.Read())
                 {
-                    loadingWindow.UpdateProgress(progress, $"Processing card {processedRecords}/{totalRecords}");
-                });
+                    if (jsonReader.TokenType == JsonToken.EndArray)
+                        break;
 
-                var cardKey = $"{record.name.Trim().ToLowerInvariant()}_{record.set.Trim().ToLowerInvariant()}_{record.collector_number.Trim().ToLowerInvariant()}";
-                if (_scryfallCards.TryGetValue(cardKey, out var card))
-                {
-                    record.image_uris = card.image_uris ?? "NOT_FOUND";
+                    yield return serializer.Deserialize<dynamic>(jsonReader);
                 }
             }
-
-            csvWriter.WriteRecords(records);
         }
-
-        File.Delete(csvFilePath);
-        File.Move(tempFilePath, csvFilePath);
     }
 
+public void UpdateCsvWithImageUris(string csvFilePath, string jsonFilePath, LoadingWindow loadingWindow)
+{
+    Console.WriteLine("Start updating CSV file.");
 
+    // Load JSON data
+    IEnumerable<dynamic> jsonCards = StreamJsonFile(jsonFilePath);
+    Console.WriteLine($"Loaded JSON file: {jsonCards.Count()} cards found.");
+
+    if (!File.Exists(csvFilePath))
+        throw new FileNotFoundException($"CSV file not found: {csvFilePath}");
+
+    var tempFilePath = $"{csvFilePath}.tmp";
+
+    using (var reader = new StreamReader(csvFilePath))
+    using (var writer = new StreamWriter(tempFilePath))
+    using (var csvReader = new CsvReader(reader, new CsvConfiguration(CultureInfo.InvariantCulture)
+    {
+        HasHeaderRecord = true,
+        HeaderValidated = null,
+        MissingFieldFound = null
+    }))
+    using (var csvWriter = new CsvWriter(writer, new CsvConfiguration(CultureInfo.InvariantCulture)
+    {
+        HasHeaderRecord = true
+    }))
+    {
+        // Read records
+        var records = csvReader.GetRecords<dynamic>().ToList();
+        Console.WriteLine("Read {0} records from CSV file.", records.Count);
+
+        // Write headers to the new file
+        csvWriter.WriteHeader<dynamic>();
+        csvWriter.NextRecord();
+
+        // Batch size
+        var batchSize = 100;
+        for (int i = 0; i < records.Count; i += batchSize)
+        {
+            var batch = records.Skip(i).Take(batchSize).ToList();
+            Console.WriteLine("Processing batch {0} of {1}.", i / batchSize + 1, Math.Ceiling((double)records.Count / batchSize));
+
+            foreach (var record in batch)
+            {
+                try
+                {
+                    // Get the card name
+                    var cardName = record.name;
+                    Console.WriteLine("Processing card: {0}", cardName);
+
+                    // Find the card in JSON data
+                    var jsonCard = jsonCards.FirstOrDefault(c => c.name == cardName);
+                    if (jsonCard != null)
+                    {
+                        if (!((IDictionary<string, object>)record).ContainsKey("mana_cost"))
+                            record.mana_cost = jsonCard.mana_cost ?? "Geen";
+
+                        if (!((IDictionary<string, object>)record).ContainsKey("oracle_text"))
+                            record.oracle_text = jsonCard.oracle_text ?? "Geen beschrijving beschikbaar.";
+
+                        if (jsonCard.legalities is JObject tempLegalities)
+                        {
+                            // Legal formats
+                            record.legal_formats = string.Join(", ",
+                                tempLegalities.Properties()
+                                    .Where(p => p.Value.ToString() == "legal")
+                                    .Select(p => p.Name));
+
+                            // Illegal formats
+                            record.illegal_formats = string.Join(", ",
+                                tempLegalities.Properties()
+                                    .Where(p => p.Value.ToString() != "legal")
+                                    .Select(p => p.Name));
+                        }
+                        else
+                        {
+                            // Default values for missing legalities
+                            record.legal_formats = "Niet beschikbaar";
+                            record.illegal_formats = "Niet beschikbaar";
+                        }
+
+                        if (!((IDictionary<string, object>)record).ContainsKey("rulings_uri"))
+                            record.rulings_uri = jsonCard.rulings_uri ?? string.Empty;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error processing card: {0}. Exception: {1}", record.name, ex.Message);
+                }
+
+                csvWriter.WriteRecord(record);
+            }
+
+            csvWriter.NextRecord();
+
+            // Update progress in the loading window
+            var progress = ((i + batchSize) / (float)records.Count) * 100;
+            Console.WriteLine("Batch {0} completed. Progress: {1:F1}%.", i / batchSize + 1, progress);
+            loadingWindow.UpdateProgress(progress, $"Batch {i / batchSize + 1} voltooid. Voortgang: {progress:F1}%");
+        }
+    }
+
+    Console.WriteLine("All batches processed. Writing final CSV file.");
+
+    File.Delete(csvFilePath);
+    File.Move(tempFilePath, csvFilePath);
+
+    Console.WriteLine("CSV update completed successfully.");
+} 
 }

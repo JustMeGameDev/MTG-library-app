@@ -31,7 +31,8 @@ namespace MTG_Library2
                 await Task.Run(() =>
                 {
                     var csvLoader = new CsvLoader(jsonPath);
-                    csvLoader.UpdateCsvWithImageUris(csvPath, loadingWindow);
+                    csvLoader.UpdateCsvWithImageUris(csvPath, jsonPath, loadingWindow);
+
 
                     // Laad kaarten na de update
                     _cards = csvLoader.LoadCardsInBatches(csvPath, 500).SelectMany(batch => batch).ToList();
@@ -63,8 +64,24 @@ namespace MTG_Library2
         }
 
 
+        private void ResultsListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            // Controleer of er een geselecteerd item is
+            if (ResultsListView.SelectedItem is Card selectedCard)
+            {
+                // Open een nieuw venster voor de geselecteerde kaart
+                var detailView = new CardDetailView(selectedCard);
+                detailView.Show(); // Gebruik Show() voor meerdere vensters
+            }
+            else if (ResultsListView.SelectedItem is Card selectedScryfallCard)
+            {
+                // Open een nieuw venster voor de geselecteerde Scryfall-kaart
+                var detailView = new CardDetailView(selectedScryfallCard);
+                detailView.Show(); // Gebruik Show() voor meerdere vensters
+            }
+        }
 
-
+        
         // Update-knop (roept de API aan om data te updaten)
         private async void UpdateButton_Click(object sender, RoutedEventArgs e)
         {

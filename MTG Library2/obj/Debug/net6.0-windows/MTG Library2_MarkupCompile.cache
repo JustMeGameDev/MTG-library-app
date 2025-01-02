@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-C:\Users\korne\RiderProjects\MTG Library2\MTG Library2\obj\Debug\net6.0-windows\
+C:\Users\korne\RiderProjects\MTG Library2\MTG-librart-app\MTG Library2\obj\Debug\net6.0-windows\
 MTG_Library2
 none
 false
 TRACE;DEBUG;NET;NET6_0;NETCOREAPP
-C:\Users\korne\RiderProjects\MTG Library2\MTG Library2\App.xaml
-31294246475
+C:\Users\korne\RiderProjects\MTG Library2\MTG-librart-app\MTG Library2\App.xaml
+4689186155
 
-9405789014
+10-171561895
 2001110078088
-LoadingWindow.xaml;MainWindow.xaml;View\DarkTheme.xaml;
+CardDetailView.xaml;LoadingWindow.xaml;MainWindow.xaml;View\DarkTheme.xaml;
 
 False
 
